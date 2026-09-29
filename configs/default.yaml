@@ -1,0 +1,42 @@
+# Default configuration. Copy this file, change one thing, give the copy a new
+# run_name, and you have a reproducible experiment. Never edit a config in
+# place after you have logged results against it.
+
+run_name: qwen1.5b-bm25-baseline
+out_dir: artifacts
+
+model:
+  name: Qwen/Qwen2.5-1.5B-Instruct
+  dtype: bfloat16
+  device: auto            # auto picks cuda, then mps, then cpu
+  max_new_tokens: 24
+  probe_layer_frac: 0.6   # tap the hidden state 60% of the way up the stack
+
+retriever:
+  kind: bm25              # bm25 or dense
+  corpus_dataset: BeIR/nq
+  corpus_config: corpus
+  max_docs: 200000        # raise once the small run works end to end
+  top_k: 5
+  dense_model: BAAI/bge-small-en-v1.5
+  index_dir: artifacts/index
+
+data:
+  datasets:
+    - nq_open
+    - trivia_qa
+  train_size: 1500        # fits the probe
+  calib_size: 500         # fits the threshold only, never seen by the probe
+  test_size: 1000
+  seed: 13
+
+gate:
+  features:
+    - hidden
+    - p_yes
+    - entropy
+  hidden_layer_sizes: [256]
+  pca_dim: 128
+  alpha: 0.02             # tolerated exact-match loss versus always retrieving
+  delta: 0.1              # failure probability of the risk bound
+  target_budgets: [0.0, 0.1, 0.2, 0.35, 0.5, 0.65, 0.8, 1.0]

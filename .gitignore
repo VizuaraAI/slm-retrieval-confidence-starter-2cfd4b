@@ -1,0 +1,20 @@
+# Generated output. Nothing in here should ever be committed: indexes are
+# large, and every artifact is reproducible from a config plus a commit hash.
+artifacts/
+.venv/
+__pycache__/
+*.pyc
+*.joblib
+*.npy
+
+# Hugging Face caches, if you point them at the project directory.
+.cache/
+hf_cache/
+
+# Editor and OS noise.
+.DS_Store
+.idea/
+.vscode/
+
+# Keep the template, ignore nothing else in experiments: your log is the most
+# valuable file in the repo and it MUST be committed.

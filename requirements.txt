@@ -1,0 +1,24 @@
+# Core. Pinned to lower bounds rather than exact versions so the project keeps
+# working; run `pip freeze > requirements.lock.txt` once your results are final
+# and commit that alongside the paper.
+torch>=2.4
+transformers>=4.44
+accelerate>=0.33
+datasets>=2.20
+sentencepiece>=0.2.0
+
+# Retrieval. bm25s is pure Python, so there is no Java dependency.
+bm25s>=0.2.0
+PyStemmer>=2.2.0
+
+# Gate, metrics, plotting.
+scikit-learn>=1.5
+numpy>=1.26
+scipy>=1.13
+joblib>=1.4
+matplotlib>=3.9
+PyYAML>=6.0
+
+# Optional: only needed for the dense-retriever ablation.
+# sentence-transformers>=3.0
+# faiss-cpu>=1.8

@@ -1,0 +1,41 @@
+# Tiny configuration for the first run. Uses a 0.5B model and a small corpus
+# so the whole three-stage pipeline finishes in a few minutes on a laptop.
+# The numbers it produces are meaningless. The point is to prove the wiring.
+
+run_name: smoke
+out_dir: artifacts
+
+model:
+  name: Qwen/Qwen2.5-0.5B-Instruct
+  dtype: float32
+  device: auto
+  max_new_tokens: 16
+  probe_layer_frac: 0.6
+
+retriever:
+  kind: bm25
+  corpus_dataset: BeIR/nq
+  corpus_config: corpus
+  max_docs: 20000
+  top_k: 3
+  dense_model: BAAI/bge-small-en-v1.5
+  index_dir: artifacts/index_smoke
+
+data:
+  datasets:
+    - nq_open
+  train_size: 120
+  calib_size: 60
+  test_size: 60
+  seed: 13
+
+gate:
+  features:
+    - hidden
+    - p_yes
+    - entropy
+  hidden_layer_sizes: [64]
+  pca_dim: 32
+  alpha: 0.05
+  delta: 0.2
+  target_budgets: [0.0, 0.25, 0.5, 0.75, 1.0]
